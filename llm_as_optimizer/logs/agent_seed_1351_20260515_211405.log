@@ -1,0 +1,80 @@
+[log] весь вывод дублируется в файл: /Users/egorstolbovoj/Desktop/ITMO/snake-optimization/llm_research_agent/logs/agent_seed_1351_20260515_211405.log
+[bootstrap] LHS 12 + corners 16 + sparse 26 = 54 уникальных θ (по 1 симуляции, workers=10)
+[bootstrap] лучший после старта: J=11.0000 θ=[4.0000, 0.0000, -4.0000, 0.0000]
+
+[turn 1/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [4.0, 0.0, -4.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=24
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 1/20] best=19.0000 θ*=[5.0000, 0.0000, -2.0000, 0.0000] | sims_total=83/2000 | explore_share=0.50 | trust_radii=[0.35, 0.07, 0.35, 0.035] | plateau=0/5
+            hypothesis (None): Elite suggests θ0≈4.0, θ2≈-4.0. Testing local variations on these axes via plane_scan. Also exploring distant regions via novelty_search to avoid local optima.
+            elite_top5: J=19.00 θ=[5.000, 0.000, -2.000, 0.000], J=19.00 θ=[6.000, 0.000, -2.000, 0.000], J=11.00 θ=[4.000, 0.000, -4.000, 0.000], J=11.00 θ=[2.000, 0.000, -6.000, 0.000], J=11.00 θ=[3.000, 0.000, -6.000, 0.000]
+
+[turn 2/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [6.0, 0.0, -1.0, 0.0], "dims": [0, 2], "radius": 1.0, "steps": 5}
+               -> ok  simulations_spent=23
+            tool: local_sweep  args={"center_theta": [5.0, 0.0, -2.0, 0.0], "dimension": 1, "values": [-1.0, 0.0, 1.0]}
+               -> ok  simulations_spent=2
+[turn 2/20] best=21.0000 θ*=[6.5000, 0.0000, -1.0000, 0.0000] | sims_total=108/2000 | explore_share=0.25 | trust_radii=[0.245, 0.049, 0.245, 0.024] | plateau=0/5
+            hypothesis (None): Elite suggests θ0≈5.0-6.0, θ2≈-2.0. Testing extension to θ0=7.0 and θ2=-1.0 via plane_scan. Also probing θ1≠0 via local_sweep.
+            elite_top5: J=21.00 θ=[6.500, 0.000, -1.000, 0.000], J=21.00 θ=[7.000, 0.000, -1.000, 0.000], J=19.00 θ=[5.000, 0.000, -2.000, 0.000], J=19.00 θ=[6.000, 0.000, -2.000, 0.000], J=19.00 θ=[5.500, 0.000, -2.000, 0.000]
+
+[turn 3/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [7.0, 0.0, -1.0, 0.0], "dimension": 0, "values": [7.5, 8.0, 8.5, 9.0]}
+               -> ok  simulations_spent=4
+            tool: novelty_search  args={"n_candidates": 4, "evaluate": true}
+               -> ok  simulations_spent=4
+[turn 3/20] best=21.0000 θ*=[6.5000, 0.0000, -1.0000, 0.0000] | sims_total=116/2000 | explore_share=0.33 | trust_radii=[0.343, 0.069, 0.343, 0.034] | plateau=1/5
+            hypothesis (None): θ1, θ3 are effectively zero (J drops to 0/1 when non-zero). θ0 ∈ [5.0, 7.0] yields J≈21. Testing if θ0 > 7.0 extends survival/apples. θ2 ∈ [-2.0, -1.0] is stable. Exploring far θ0/
+            elite_top5: J=21.00 θ=[6.500, 0.000, -1.000, 0.000], J=21.00 θ=[7.000, 0.000, -1.000, 0.000], J=21.00 θ=[7.500, 0.000, -1.000, 0.000], J=20.00 θ=[8.000, 0.000, -1.000, 0.000], J=20.00 θ=[8.500, 0.000, -1.000, 0.000]
+
+[turn 4/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [6.5, 0.0, -1.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=17
+[turn 4/20] best=21.0000 θ*=[6.5000, 0.0000, -1.0000, 0.0000] | sims_total=133/2000 | explore_share=0.29 | trust_radii=[0.48, 0.096, 0.48, 0.048] | plateau=2/5
+            hypothesis (None): θ2 around -2.9 (per coord_obs) may outperform -1.0. θ0 around 6.5 is optimal. Testing interaction between θ0 and θ2 via plane_scan.
+            elite_top5: J=21.00 θ=[6.500, 0.000, -1.000, 0.000], J=21.00 θ=[7.000, 0.000, -1.000, 0.000], J=21.00 θ=[7.500, 0.000, -1.000, 0.000], J=20.00 θ=[8.000, 0.000, -1.000, 0.000], J=20.00 θ=[8.500, 0.000, -1.000, 0.000]
+
+[turn 5/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [6.5, 0.0, 0.0, 0.0], "dimension": 0, "radius": 2.0, "steps": 9}
+               -> ok  simulations_spent=1
+            tool: novelty_search  args={"n_candidates": 4, "evaluate": true}
+               -> ok  simulations_spent=4
+[turn 5/20] best=21.0000 θ*=[6.5000, 0.0000, -1.0000, 0.0000] | sims_total=138/2000 | explore_share=0.33 | trust_radii=[0.672, 0.134, 0.672, 0.067] | plateau=3/5
+            hypothesis (None): Zeroing θ2 maintains peak performance. Testing θ0 sensitivity on this ridge will map the basin width. Novelty search targets unexplored sign patterns (θ2>0, θ0<0) to escape the
+            reasoning: Elite plateau at J=21.0 with θ2=-1.0. Plane scan revealed θ2=0.0 yields identical J, forming a ridge. I will exploit this by sweeping θ0 around 6.5 with θ2=0.0 to map the basin width. Simultaneously, I will run novelty_search to probe unexplored sign patterns (θ2>0, θ0<0) and see
+            elite_top5: J=21.00 θ=[6.500, 0.000, -1.000, 0.000], J=21.00 θ=[7.000, 0.000, -1.000, 0.000], J=21.00 θ=[7.500, 0.000, -1.000, 0.000], J=20.00 θ=[8.000, 0.000, -1.000, 0.000], J=20.00 θ=[8.500, 0.000, -1.000, 0.000]
+
+[turn 6/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [-6.0, 0.0, -1.0, 0.0], "dimension": 0, "values": [-9.0, -8.0, -7.0, -6.0, -5.0, -4.0, -3.0]}
+               -> ok  simulations_spent=7
+[turn 6/20] best=21.0000 θ*=[6.5000, 0.0000, -1.0000, 0.0000] | sims_total=145/2000 | explore_share=0.30 | trust_radii=[0.941, 0.188, 0.941, 0.094] | plateau=4/5
+            hypothesis (None): Flipping θ0 to negative (θ0∈[-9,-3]) while maintaining θ2=-1.0 will break the current deadlock and yield J>21, as the policy's directional bias is inverted relative to the optimal/
+            elite_top5: J=21.00 θ=[6.500, 0.000, -1.000, 0.000], J=21.00 θ=[7.000, 0.000, -1.000, 0.000], J=21.00 θ=[7.500, 0.000, -1.000, 0.000], J=20.00 θ=[8.000, 0.000, -1.000, 0.000], J=20.00 θ=[8.500, 0.000, -1.000, 0.000]
+
+[turn 7/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [7.0, 0.0, -1.0, 0.0], "dimension": 2, "values": [-6.0, -5.0, -4.0, -3.0, -2.0, -1.0, 0.0]}
+               -> ok  simulations_spent=4
+            tool: local_sweep  args={"center_theta": [7.0, 0.0, -1.0, 0.0], "dimension": 0, "values": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0]}
+               -> ok  simulations_spent=5
+[turn 7/20] best=21.0000 θ*=[6.5000, 0.0000, -1.0000, 0.0000] | sims_total=154/2000 | explore_share=0.25 | trust_radii=[1.318, 0.264, 1.318, 0.132] | plateau=5/5
+            hypothesis (None): The optimal policy is sparse with θ0>0 and θ2<0. The current elite [7, 0, -1, 0] is near optimal. J=21 is the physical ceiling for this seed.
+            reasoning: Elite is sparse [~7, 0, -1, 0]. Novelty search (far regions) and negative θ0 sweeps failed (J=0). Testing 'zero-cluster' hypothesis: is θ2=-1 necessary? Is θ0=7 necessary? Running two local sweeps: one on θ2 from -6 to 0, one on θ0 from 0 to 5. If these fail to beat J=21, J=21 is
+            elite_top5: J=21.00 θ=[6.500, 0.000, -1.000, 0.000], J=21.00 θ=[7.000, 0.000, -1.000, 0.000], J=21.00 θ=[7.500, 0.000, -1.000, 0.000], J=20.00 θ=[8.000, 0.000, -1.000, 0.000], J=20.00 θ=[8.500, 0.000, -1.000, 0.000]
+[stop] плато: best не растёт 5 ходов подряд (patience=5). best=21.0000
+
+--- итог ---
+Best: J=21.0 θ=[6.5, 0.0, -1.0, 0.0] (apples=22, steps=213, died=True)
+Всего симуляций: 154; уникальных θ в кэше: 154
+Топ-10 elite:
+  J=21.0  θ=[6.5, 0.0, -1.0, 0.0]
+  J=21.0  θ=[7.0, 0.0, -1.0, 0.0]
+  J=21.0  θ=[7.5, 0.0, -1.0, 0.0]
+  J=20.0  θ=[8.0, 0.0, -1.0, 0.0]
+  J=20.0  θ=[8.5, 0.0, -1.0, 0.0]
+  J=19.0  θ=[5.0, 0.0, -2.0, 0.0]
+  J=19.0  θ=[6.0, 0.0, -2.0, 0.0]
+  J=19.0  θ=[5.5, 0.0, -2.0, 0.0]
+  J=19.0  θ=[6.5, 0.0, -2.0, 0.0]
+  J=19.0  θ=[7.0, 0.0, -2.0, 0.0]

@@ -1,0 +1,62 @@
+[log] весь вывод дублируется в файл: /Users/egorstolbovoj/Desktop/ITMO/snake-optimization/llm_research_agent/logs/agent_seed_9999_20260516_223556.log
+[bootstrap] LHS 12 + corners 16 + sparse 26 = 54 уникальных θ (по 1 симуляции, workers=10)
+[bootstrap] лучший после старта: J=43.0000 θ=[4.0000, 0.0000, 4.0000, 0.0000]
+
+[turn 1/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [4.0, 0.0, 4.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=24
+            tool: novelty_search  args={"n_candidates": 10, "evaluate": true}
+               -> ok  simulations_spent=10
+[turn 1/20] best=43.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=88/2000 | explore_share=0.50 | trust_radii=[0.7, 0.14, 0.7, 0.07] | plateau=1/5
+            hypothesis (None): θ0 should be >4 or <4 (unexplored). θ2 peak near 4. θ1,θ3 likely 0.
+            reasoning: Elite shows θ0=4.0 fixed, θ2 varies. Sensitivity shows θ0 range [4,4] (unexplored), θ2 range [-4,4]. Must explore θ0. Plan: 1) plane_scan on θ0,θ2 around best to find optimal magnitude/sign for θ0 and refine θ2. 2) novelty_search for global exploration.
+            elite_top5: J=43.00 θ=[4.000, 0.000, 4.000, 0.000], J=43.00 θ=[2.000, 0.000, 2.000, 0.000], J=43.00 θ=[3.000, 0.000, 2.000, 0.000], J=43.00 θ=[4.000, 0.000, 2.000, 0.000], J=43.00 θ=[5.000, 0.000, 2.000, 0.000]
+
+[turn 2/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [4.0, 0.0, 4.0, 0.0], "dimension": 0, "values": [0.0, 1.0, 2.0, 3.0, 5.0, 6.0, 7.0]}
+               -> ok  simulations_spent=2
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 2/20] best=43.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=95/2000 | explore_share=0.50 | trust_radii=[0.98, 0.196, 0.98, 0.098] | plateau=2/5
+            hypothesis (None): θ1, θ3 are inert (zero-cluster). θ0, θ2 form a broad plateau around J=43. Testing θ0∈[0,7] will verify if 43 is a hard ceiling or if a sharper peak exists. If J remains 43 across [
+            elite_top5: J=43.00 θ=[4.000, 0.000, 4.000, 0.000], J=43.00 θ=[2.000, 0.000, 2.000, 0.000], J=43.00 θ=[3.000, 0.000, 2.000, 0.000], J=43.00 θ=[4.000, 0.000, 2.000, 0.000], J=43.00 θ=[5.000, 0.000, 2.000, 0.000]
+
+[turn 3/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [6.0, 0.0, 6.0, 0.0], "dimension": 0, "values": [8.0, 9.0, 10.0, 11.0, 12.0]}
+               -> ok  simulations_spent=5
+            tool: plane_scan  args={"center_theta": [-2.0, 0.0, -2.0, 0.0], "dims": [0, 2], "radius": 2, "steps": 3}
+               -> ok  simulations_spent=7
+[turn 3/20] best=43.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=107/2000 | explore_share=0.33 | trust_radii=[1.372, 0.274, 1.372, 0.137] | plateau=3/5
+            hypothesis (None): J=43 is the physical ceiling for this seed. θ1, θ3 are strictly inert. θ0, θ2 ≥ 2 saturates performance. Negative weights collapse to J≈0. Testing higher positives and negative bas
+            reasoning: Elite weights show θ1, θ3 are strictly zero-cluster with 0 sensitivity. θ0, θ2 plateau at J=43 for values ≥2. Previous sweep confirmed J=43 persists up to 7. To test if 43 is a hard ceiling or if larger magnitudes help, I probe higher positive values. To test sign sensitivity, I扫
+            elite_top5: J=43.00 θ=[4.000, 0.000, 4.000, 0.000], J=43.00 θ=[2.000, 0.000, 2.000, 0.000], J=43.00 θ=[3.000, 0.000, 2.000, 0.000], J=43.00 θ=[4.000, 0.000, 2.000, 0.000], J=43.00 θ=[5.000, 0.000, 2.000, 0.000]
+
+[turn 4/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [-4.0, 1.0, -4.0, 1.0], "dims": [0, 1], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=25
+[turn 4/20] best=43.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=132/2000 | explore_share=0.29 | trust_radii=[1.5, 0.384, 1.5, 0.192] | plateau=4/5
+            hypothesis (None): J=43 is likely the physical ceiling for this seed. θ1,θ3 are inert at 0. Sign-flipping θ0,θ2 to negative values inverts policy direction, causing immediate crashes (J≈0). θ1,θ3 may
+            elite_top5: J=43.00 θ=[4.000, 0.000, 4.000, 0.000], J=43.00 θ=[2.000, 0.000, 2.000, 0.000], J=43.00 θ=[3.000, 0.000, 2.000, 0.000], J=43.00 θ=[4.000, 0.000, 2.000, 0.000], J=43.00 θ=[5.000, 0.000, 2.000, 0.000]
+
+[turn 5/20] запрос к LLM (таймаут 240 с)...
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 5/20] best=43.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=137/2000 | explore_share=0.38 | trust_radii=[1.5, 0.538, 1.5, 0.269] | plateau=5/5
+            hypothesis (None): J=43 is the physical ceiling for this seed. θ1, θ3 are inert (optimal=0). θ0, θ2 must be positive and large (>=4.0). Sign flips of θ0, θ2 cause immediate crashes (J≈0). The elite [
+            elite_top5: J=43.00 θ=[4.000, 0.000, 4.000, 0.000], J=43.00 θ=[2.000, 0.000, 2.000, 0.000], J=43.00 θ=[3.000, 0.000, 2.000, 0.000], J=43.00 θ=[4.000, 0.000, 2.000, 0.000], J=43.00 θ=[5.000, 0.000, 2.000, 0.000]
+[stop] плато: best не растёт 5 ходов подряд (patience=5). best=43.0000
+
+--- итог ---
+Best: J=43.0 θ=[4.0, 0.0, 4.0, 0.0] (apples=44, steps=561, died=True)
+Всего симуляций: 137; уникальных θ в кэше: 137
+Топ-10 elite:
+  J=43.0  θ=[4.0, 0.0, 4.0, 0.0]
+  J=43.0  θ=[2.0, 0.0, 2.0, 0.0]
+  J=43.0  θ=[3.0, 0.0, 2.0, 0.0]
+  J=43.0  θ=[4.0, 0.0, 2.0, 0.0]
+  J=43.0  θ=[5.0, 0.0, 2.0, 0.0]
+  J=43.0  θ=[2.0, 0.0, 3.0, 0.0]
+  J=43.0  θ=[3.0, 0.0, 3.0, 0.0]
+  J=43.0  θ=[4.0, 0.0, 3.0, 0.0]
+  J=43.0  θ=[5.0, 0.0, 3.0, 0.0]
+  J=43.0  θ=[6.0, 0.0, 3.0, 0.0]

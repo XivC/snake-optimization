@@ -1,0 +1,8 @@
+{
+  "w_food": 1.0,
+  "w_danger": 0.0,
+  "w_space": 6.0,
+  "w_wall": 0.0,
+  "J": 44.0,
+  "aborted": false
+}

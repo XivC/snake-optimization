@@ -9,47 +9,74 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 from llm_as_optimizer.prompts import SYSTEM_PROMPT
+from llm_as_optimizer.tools import ALLOWED_TOOLS
 
 load_dotenv()
 
 POLZA_BASE_URL = "https://polza.ai/api/v1"
 DEFAULT_MODEL = "qwen/qwen3.6-35b-a3b"
-THETA_DIM = 4
-DEFAULT_NUM_CANDIDATES = 3
-# Таймаут HTTP к API (сек.); иначе зависание без строки в логе
 DEFAULT_LLM_TIMEOUT_SEC = 240.0
 
 
-def _response_format_json_schema(*, num_candidates: int, theta_dim: int = THETA_DIM) -> dict[str, Any]:
-    """Формат ответа API: structured outputs (json_schema)."""
+def _response_format_agent_step() -> dict[str, Any]:
     return {
         "type": "json_schema",
         "json_schema": {
-            "name": "snake_optimization_step",
-            "strict": True,
+            "name": "research_agent_step",
+            "strict": False,
             "schema": {
                 "type": "object",
                 "properties": {
-                    "hypothesis_note": {
+                    "reasoning_brief": {
                         "type": "string",
-                        "description": "One sentence: task understanding + optimization hypothesis; why candidates fit.",
-                        "minLength": 16,
-                        "maxLength": 500,
+                        "maxLength": 280,
+                        "description": "1 short sentence: what you're testing and why.",
                     },
-                    "candidates": {
+                    "hypothesis": {
+                        "type": "string",
+                        "minLength": 8,
+                        "maxLength": 180,
+                        "description": "Current falsifiable hypothesis (one sentence).",
+                    },
+                    "confidence": {
+                        "type": "number",
+                        "minimum": 0.0,
+                        "maximum": 1.0,
+                    },
+                    "belief_updates": {
                         "type": "array",
+                        "maxItems": 3,
                         "items": {
-                            "type": "array",
-                            "items": {"type": "number"},
-                            "minItems": theta_dim,
-                            "maxItems": theta_dim,
+                            "type": "object",
+                            "properties": {
+                                "statement": {"type": "string", "minLength": 4, "maxLength": 160},
+                                "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+                                "action": {
+                                    "type": "string",
+                                    "enum": ["add", "reinforce", "weaken", "remove"],
+                                },
+                            },
+                            "required": ["statement", "action"],
                         },
-                        "minItems": num_candidates,
-                        "maxItems": num_candidates,
+                    },
+                    "tool_calls": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 2,
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "tool": {
+                                    "type": "string",
+                                    "enum": sorted(ALLOWED_TOOLS),
+                                },
+                                "args": {"type": "object"},
+                            },
+                            "required": ["tool", "args"],
+                        },
                     },
                 },
-                "required": ["candidates", "hypothesis_note"],
-                "additionalProperties": False,
+                "required": ["hypothesis", "tool_calls"],
             },
         },
     }
@@ -63,22 +90,22 @@ def _strip_json_fence(text: str) -> str:
     return t
 
 
-def ask_llm(
+def ask_agent(
     user_content: str,
     *,
     model: str = DEFAULT_MODEL,
-    temperature: float = 0.7,
-    num_candidates: int = DEFAULT_NUM_CANDIDATES,
+    temperature: float = 0.3,
     timeout_sec: float | None = None,
-) -> dict[str, Any] | list[Any]:
+) -> dict[str, Any]:
     key = os.environ.get("POLZA_AI_API_KEY")
     if not key:
         msg = "Задайте POLZA_AI_API_KEY в окружении или в .env"
         raise RuntimeError(msg)
 
-    to = timeout_sec if timeout_sec is not None else float(os.environ.get("LLM_TIMEOUT_SEC", str(DEFAULT_LLM_TIMEOUT_SEC)))
+    to = timeout_sec if timeout_sec is not None else float(
+        os.environ.get("LLM_TIMEOUT_SEC", str(DEFAULT_LLM_TIMEOUT_SEC))
+    )
     client = OpenAI(base_url=POLZA_BASE_URL, api_key=key, timeout=to)
-    response_format = _response_format_json_schema(num_candidates=num_candidates)
     response = client.chat.completions.create(
         model=model,
         messages=[
@@ -86,7 +113,7 @@ def ask_llm(
             {"role": "user", "content": user_content},
         ],
         temperature=temperature,
-        response_format=response_format,  # type: ignore[arg-type]
+        response_format=_response_format_agent_step(),  # type: ignore[arg-type]
     )
     raw = response.choices[0].message.content
     if raw is None or not raw.strip():
@@ -94,7 +121,10 @@ def ask_llm(
         raise RuntimeError(msg)
     cleaned = _strip_json_fence(raw)
     out: object = json.loads(cleaned)
-    if isinstance(out, dict | list):
-        return out
-    msg = f"Ожидался JSON-объект или массив, получено: {type(out).__name__}"
-    raise TypeError(msg)
+    if not isinstance(out, dict):
+        msg = f"Ожидался JSON-объект, получено: {type(out).__name__}"
+        raise TypeError(msg)
+    if "tool_calls" not in out or not isinstance(out["tool_calls"], list):
+        msg = "В ответе модели нет массива tool_calls"
+        raise ValueError(msg)
+    return out

@@ -1,0 +1,93 @@
+[log] весь вывод дублируется в файл: /Users/egorstolbovoj/Desktop/ITMO/snake-optimization/llm_research_agent/logs/agent_seed_1888_20260515_230039.log
+[bootstrap] LHS 12 + corners 16 + sparse 26 = 54 уникальных θ (по 1 симуляции, workers=10)
+[bootstrap] лучший после старта: J=26.0000 θ=[4.0000, 0.0000, 4.0000, 0.0000]
+
+[turn 1/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [4.0, 0.0, 4.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=24
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 1/20] best=26.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=83/2000 | explore_share=0.50 | trust_radii=[0.7, 0.14, 0.7, 0.07] | plateau=1/5
+            hypothesis (None): Elite at [4,0,4,0] is strong. Coordinate observations suggest θ0~2.6, θ2~-2.3, conflicting with elite. Testing plane around elite to confirm peak and check if θ0 can be reduced. θ2
+            elite_top5: J=26.00 θ=[4.000, 0.000, 4.000, 0.000], J=26.00 θ=[2.000, 0.000, 2.000, 0.000], J=26.00 θ=[3.000, 0.000, 2.000, 0.000], J=26.00 θ=[4.000, 0.000, 2.000, 0.000], J=26.00 θ=[5.000, 0.000, 2.000, 0.000]
+
+[turn 2/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [4.0, 0.0, 4.0, 0.0], "dims": [0, 2], "radius": 4.0, "steps": 5}
+               -> ok  simulations_spent=14
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 2/20] best=35.0000 θ*=[2.0000, 0.0000, 8.0000, 0.0000] | sims_total=102/2000 | explore_share=0.50 | trust_radii=[0.49, 0.098, 0.49, 0.049] | plateau=0/5
+            hypothesis (None): J=26.0 is a plateau for θ0, θ2 in [2.0, 6.0]. Testing if J increases for θ0, θ2 > 6.0. θ1, θ3 should be 0.
+            elite_top5: J=35.00 θ=[2.000, 0.000, 8.000, 0.000], J=26.00 θ=[4.000, 0.000, 4.000, 0.000], J=26.00 θ=[2.000, 0.000, 2.000, 0.000], J=26.00 θ=[3.000, 0.000, 2.000, 0.000], J=26.00 θ=[4.000, 0.000, 2.000, 0.000]
+
+[turn 3/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [2.0, 0.0, 8.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=18
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 3/20] best=44.0000 θ*=[1.0000, 0.0000, 6.0000, 0.0000] | sims_total=125/2000 | explore_share=0.50 | trust_radii=[0.343, 0.069, 0.343, 0.034] | plateau=0/5
+            hypothesis (None): J increases for θ2 > 8.0 at θ0=2.0. θ1, θ3 remain 0.
+            elite_top5: J=44.00 θ=[1.000, 0.000, 6.000, 0.000], J=44.00 θ=[1.000, 0.000, 7.000, 0.000], J=44.00 θ=[1.000, 0.000, 8.000, 0.000], J=44.00 θ=[1.000, 0.000, 9.000, 0.000], J=37.00 θ=[2.000, 0.000, 10.000, 0.000]
+
+[turn 4/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [3.0, 0.0, 9.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=9
+[turn 4/20] best=44.0000 θ*=[1.0000, 0.0000, 6.0000, 0.0000] | sims_total=134/2000 | explore_share=0.43 | trust_radii=[0.48, 0.096, 0.48, 0.048] | plateau=1/5
+            hypothesis (None): J increases for θ0>3 or θ2>8. If J stays 44.0, the plateau extends further or J=44 is the seed ceiling.
+            reasoning: Elite plateau at J=44.0 spans θ0∈[1,3], θ2∈[6,8]. Testing extension to higher θ0 and θ2 to find if J increases or hits a ceiling. θ1, θ3 remain zeroed based on consistent zero-clusters.
+            elite_top5: J=44.00 θ=[1.000, 0.000, 6.000, 0.000], J=44.00 θ=[1.000, 0.000, 7.000, 0.000], J=44.00 θ=[1.000, 0.000, 8.000, 0.000], J=44.00 θ=[1.000, 0.000, 9.000, 0.000], J=44.00 θ=[2.000, 0.000, 11.000, 0.000]
+
+[turn 5/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [1.0, 0.0, 9.0, 0.0], "dimension": 2, "values": [6.0, 7.0, 8.0, 9.0, 10.0]}
+               -> ok  simulations_spent=0
+[turn 5/20] best=44.0000 θ*=[1.0000, 0.0000, 6.0000, 0.0000] | sims_total=134/2000 | explore_share=0.38 | trust_radii=[0.672, 0.134, 0.672, 0.067] | plateau=2/5
+            hypothesis (None): J=44.0 is the seed ceiling for θ0≈1.0. The plateau in θ2 is narrow (6-8) or extends to 10. Testing θ2∈[6.0, 10.0] to bound the upper limit of the plateau.
+            elite_top5: J=44.00 θ=[1.000, 0.000, 6.000, 0.000], J=44.00 θ=[1.000, 0.000, 7.000, 0.000], J=44.00 θ=[1.000, 0.000, 8.000, 0.000], J=44.00 θ=[1.000, 0.000, 9.000, 0.000], J=44.00 θ=[2.000, 0.000, 11.000, 0.000]
+
+[turn 6/20] запрос к LLM (таймаут 240 с)...
+[turn 6] сбой LLM/API (APIConnectionError): Connection error.; пропускаем ход
+
+[turn 7/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [0.5, 0.0, 6.0, 0.0], "dimension": 0, "values": [-0.5, 0.0, 0.5, 1.0, 1.5]}
+               -> ok  simulations_spent=3
+            tool: local_sweep  args={"center_theta": [1.0, 0.0, 4.0, 0.0], "dimension": 2, "values": [2.0, 3.0, 4.0, 5.0, 6.0]}
+               -> ok  simulations_spent=4
+[turn 7/20] best=44.0000 θ*=[1.0000, 0.0000, 6.0000, 0.0000] | sims_total=141/2000 | explore_share=0.30 | trust_radii=[0.941, 0.188, 0.941, 0.094] | plateau=3/5
+            hypothesis (None): The plateau at J=44.0 extends to theta0 < 1.0 and theta2 < 6.0. Testing boundaries.
+            elite_top5: J=44.00 θ=[1.000, 0.000, 6.000, 0.000], J=44.00 θ=[1.000, 0.000, 7.000, 0.000], J=44.00 θ=[1.000, 0.000, 8.000, 0.000], J=44.00 θ=[1.000, 0.000, 9.000, 0.000], J=44.00 θ=[2.000, 0.000, 11.000, 0.000]
+
+[turn 8/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [-1.0, 0.0, -6.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=24
+[turn 8/20] best=44.0000 θ*=[1.0000, 0.0000, 6.0000, 0.0000] | sims_total=165/2000 | explore_share=0.27 | trust_radii=[1.318, 0.264, 1.318, 0.132] | plateau=4/5
+            hypothesis (None): Negative θ0, θ2 will yield J≈0 or significantly lower than 44.0, confirming J=44.0 is a global maximum for this seed under current policy structure.
+            reasoning: Plateau streak 3/5 indicates stopping refinement of current basin. Testing sign-flipped region (θ0, θ2 negative) to check for symmetry or distinct attractors. If J remains low, J=44.0 is likely the physical ceiling for this seed.
+            elite_top5: J=44.00 θ=[1.000, 0.000, 6.000, 0.000], J=44.00 θ=[1.000, 0.000, 7.000, 0.000], J=44.00 θ=[1.000, 0.000, 8.000, 0.000], J=44.00 θ=[1.000, 0.000, 9.000, 0.000], J=44.00 θ=[2.000, 0.000, 11.000, 0.000]
+
+[turn 9/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [-5.0, 0.0, -5.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=21
+[turn 9/20] best=44.0000 θ*=[1.0000, 0.0000, 6.0000, 0.0000] | sims_total=186/2000 | explore_share=0.25 | trust_radii=[1.5, 0.369, 1.5, 0.184] | plateau=5/5
+            hypothesis (None): Negative θ0 and θ2 will yield J < 10.0, confirming J=44.0 is the global maximum for this seed under current policy structure.
+            reasoning: Plateau streak 4/5 at J=44.0. Current basin (positive θ0, θ2) exhausted. Following instruction to explore drastically different region, I run a plane scan over negative θ0 and θ2 values to test sign-flip hypothesis and check for alternate local maxima or physical ceiling.
+            elite_top5: J=44.00 θ=[1.000, 0.000, 6.000, 0.000], J=44.00 θ=[1.000, 0.000, 7.000, 0.000], J=44.00 θ=[1.000, 0.000, 8.000, 0.000], J=44.00 θ=[1.000, 0.000, 9.000, 0.000], J=44.00 θ=[2.000, 0.000, 11.000, 0.000]
+[stop] плато: best не растёт 5 ходов подряд (patience=5). best=44.0000
+
+--- итог ---
+Best: J=44.0 θ=[1.0, 0.0, 6.0, 0.0] (apples=45, steps=617, died=True)
+Всего симуляций: 186; уникальных θ в кэше: 186
+Топ-10 elite:
+  J=44.0  θ=[1.0, 0.0, 6.0, 0.0]
+  J=44.0  θ=[1.0, 0.0, 7.0, 0.0]
+  J=44.0  θ=[1.0, 0.0, 8.0, 0.0]
+  J=44.0  θ=[1.0, 0.0, 9.0, 0.0]
+  J=44.0  θ=[2.0, 0.0, 11.0, 0.0]
+  J=37.0  θ=[2.0, 0.0, 10.0, 0.0]
+  J=37.0  θ=[1.0, 0.0, 5.0, 0.0]
+  J=35.0  θ=[2.0, 0.0, 8.0, 0.0]
+  J=35.0  θ=[2.0, 0.0, 7.0, 0.0]
+  J=35.0  θ=[2.0, 0.0, 9.0, 0.0]
+Гипотезы (beliefs):
+  (0.95, support=1) θ1 and θ3 are not important (should be 0).
+  (0.80, support=1) θ0 and θ2 are important and positive. The plateau at J=26.0 extends from θ0=2.0 to θ0=6.0 and θ2=2.0 to θ2=6.0.
+  (0.50, support=1) Testing if J increases for θ0, θ2 > 6.0.

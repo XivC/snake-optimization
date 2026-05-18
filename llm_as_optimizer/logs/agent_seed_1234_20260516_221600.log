@@ -1,0 +1,63 @@
+[log] весь вывод дублируется в файл: /Users/egorstolbovoj/Desktop/ITMO/snake-optimization/llm_research_agent/logs/agent_seed_1234_20260516_221600.log
+[bootstrap] LHS 12 + corners 16 + sparse 26 = 54 уникальных θ (по 1 симуляции, workers=10)
+[bootstrap] лучший после старта: J=32.0000 θ=[4.0000, 0.0000, 4.0000, 0.0000]
+
+[turn 1/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [4.0, 0.0, 4.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=24
+[turn 1/20] best=32.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=78/2000 | explore_share=0.00 | trust_radii=[0.7, 0.14, 0.7, 0.07] | plateau=1/5
+            hypothesis (None): Elite θ=[4,0,4,0] suggests θ0,θ2 should be large positive. Sensitivity shows θ0 fixed at 4.0 (untested range) and θ2 at upper bound. Hypothesis: J increases with θ0 and θ2 beyond 4
+            elite_top5: J=32.00 θ=[4.000, 0.000, 4.000, 0.000], J=32.00 θ=[2.000, 0.000, 2.000, 0.000], J=32.00 θ=[2.000, 0.000, 3.000, 0.000], J=32.00 θ=[3.000, 0.000, 3.000, 0.000], J=32.00 θ=[2.000, 0.000, 4.000, 0.000]
+
+[turn 2/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [6.0, 0.0, 6.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=16
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 2/20] best=32.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=99/2000 | explore_share=0.33 | trust_radii=[0.98, 0.196, 0.98, 0.098] | plateau=2/5
+            hypothesis (None): J(θ) is non-decreasing or peaks around θ0,θ2∈[4,8]. θ1,θ3 remain zero.
+            reasoning: Elite plateau at J=32 for θ0,θ2∈[2,4]. Sensitivity shows θ1,θ3 effectively zero. Hypothesis: J may increase or plateau beyond 4. Testing basin around [6,0,6,0] to falsify/confirm. Exploration share is 0.0, so adding novelty_search to probe unexplored regions.
+            elite_top5: J=32.00 θ=[4.000, 0.000, 4.000, 0.000], J=32.00 θ=[2.000, 0.000, 2.000, 0.000], J=32.00 θ=[2.000, 0.000, 3.000, 0.000], J=32.00 θ=[3.000, 0.000, 3.000, 0.000], J=32.00 θ=[2.000, 0.000, 4.000, 0.000]
+
+[turn 3/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [2.0, 0.0, 2.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=14
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 3/20] best=32.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=118/2000 | explore_share=0.40 | trust_radii=[1.372, 0.274, 1.372, 0.137] | plateau=3/5
+            hypothesis (None): J(θ) peaks around θ0,θ2∈[0,4] with θ1=θ3=0. Values <2.0 may yield J≥32.0. Mixed signs likely yield J<32.0.
+            reasoning: Elite solutions plateau at J=32.0 for θ0,θ2∈[2,4] with θ1=θ3=0. Previous plane scan around [6,0,6,0] found max at [4,0,4,0], suggesting peak is at or below 4.0. Need to explore θ0,θ2 < 2.0 and check mixed sign patterns via novelty search.
+            elite_top5: J=32.00 θ=[4.000, 0.000, 4.000, 0.000], J=32.00 θ=[2.000, 0.000, 2.000, 0.000], J=32.00 θ=[2.000, 0.000, 3.000, 0.000], J=32.00 θ=[3.000, 0.000, 3.000, 0.000], J=32.00 θ=[2.000, 0.000, 4.000, 0.000]
+
+[turn 4/20] запрос к LLM (таймаут 240 с)...
+            tool: evaluate_theta  args={"theta": [-4.0, 0.0, -4.0, 0.0]}
+               -> ok  simulations_spent=1
+            tool: evaluate_theta  args={"theta": [4.0, 0.0, 0.0, 0.0]}
+               -> ok  simulations_spent=0
+[turn 4/20] best=32.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=119/2000 | explore_share=0.29 | trust_radii=[1.5, 0.384, 1.5, 0.192] | plateau=4/5
+            hypothesis (None): J(θ) is invariant under sign flip of θ0, θ2. Sparsity on θ2 does not degrade performance significantly.
+            elite_top5: J=32.00 θ=[4.000, 0.000, 4.000, 0.000], J=32.00 θ=[2.000, 0.000, 2.000, 0.000], J=32.00 θ=[2.000, 0.000, 3.000, 0.000], J=32.00 θ=[3.000, 0.000, 3.000, 0.000], J=32.00 θ=[2.000, 0.000, 4.000, 0.000]
+
+[turn 5/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [4.0, 0.0, -4.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=24
+[turn 5/20] best=32.0000 θ*=[4.0000, 0.0000, 4.0000, 0.0000] | sims_total=143/2000 | explore_share=0.25 | trust_radii=[1.5, 0.538, 1.5, 0.269] | plateau=5/5
+            hypothesis (None): J degrades if θ0 and θ2 share the same sign; optimal policy requires opposing signs for θ0 and θ2 to balance forward momentum vs turning control.
+            reasoning: Elite weights are sparse with θ1=θ3=0 and θ0,θ2∈[2,4]. Sign flip of best failed (J=0). Mixed-sign patterns (positive θ0, negative θ2 or vice versa) are unexplored. A plane scan around [4,0,-4,0] will test this drastically different sign configuration while keeping magnitudes high
+            elite_top5: J=32.00 θ=[4.000, 0.000, 4.000, 0.000], J=32.00 θ=[2.000, 0.000, 2.000, 0.000], J=32.00 θ=[2.000, 0.000, 3.000, 0.000], J=32.00 θ=[3.000, 0.000, 3.000, 0.000], J=32.00 θ=[2.000, 0.000, 4.000, 0.000]
+[stop] плато: best не растёт 5 ходов подряд (patience=5). best=32.0000
+
+--- итог ---
+Best: J=32.0 θ=[4.0, 0.0, 4.0, 0.0] (apples=33, steps=411, died=True)
+Всего симуляций: 143; уникальных θ в кэше: 143
+Топ-10 elite:
+  J=32.0  θ=[4.0, 0.0, 4.0, 0.0]
+  J=32.0  θ=[2.0, 0.0, 2.0, 0.0]
+  J=32.0  θ=[2.0, 0.0, 3.0, 0.0]
+  J=32.0  θ=[3.0, 0.0, 3.0, 0.0]
+  J=32.0  θ=[2.0, 0.0, 4.0, 0.0]
+  J=32.0  θ=[3.0, 0.0, 4.0, 0.0]
+  J=32.0  θ=[2.0, 0.0, 5.0, 0.0]
+  J=32.0  θ=[3.0, 0.0, 5.0, 0.0]
+  J=32.0  θ=[4.0, 0.0, 5.0, 0.0]
+  J=32.0  θ=[5.0, 0.0, 5.0, 0.0]

@@ -1,3 +1,3 @@
-from llm_as_optimizer.run import llm_optimizer, main
+from llm_as_optimizer.agent import main, run_agent
 
-__all__ = ["llm_optimizer", "main"]
+__all__ = ["main", "run_agent"]

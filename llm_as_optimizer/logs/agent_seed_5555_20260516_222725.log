@@ -1,0 +1,62 @@
+[log] весь вывод дублируется в файл: /Users/egorstolbovoj/Desktop/ITMO/snake-optimization/llm_research_agent/logs/agent_seed_5555_20260516_222725.log
+[bootstrap] LHS 12 + corners 16 + sparse 26 = 54 уникальных θ (по 1 симуляции, workers=10)
+[bootstrap] лучший после старта: J=18.0000 θ=[4.0000, 0.0000, -4.0000, 0.0000]
+
+[turn 1/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [4.0, 0.0, -4.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=24
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 1/20] best=18.0000 θ*=[4.0000, 0.0000, -4.0000, 0.0000] | sims_total=83/2000 | explore_share=0.50 | trust_radii=[0.7, 0.14, 0.7, 0.07] | plateau=1/5
+            hypothesis (None): θ0 should be high positive (≥3.0), θ2 should be negative (≤-3.0). θ1, θ3 likely zero or small. Elite at [4,0,-4,0] suggests boundary effects; test neighbors and zeroed axes.
+            elite_top5: J=18.00 θ=[4.000, 0.000, -4.000, 0.000], J=18.00 θ=[2.000, 0.000, -6.000, 0.000], J=18.00 θ=[3.000, 0.000, -6.000, 0.000], J=18.00 θ=[4.000, 0.000, -6.000, 0.000], J=18.00 θ=[5.000, 0.000, -6.000, 0.000]
+
+[turn 2/20] запрос к LLM (таймаут 240 с)...
+            tool: local_sweep  args={"center_theta": [4.0, 0.0, -4.0, 0.0], "dimension": 0, "values": [4.0, 5.0, 6.0, 0.0]}
+               -> ok  simulations_spent=0
+            tool: local_sweep  args={"center_theta": [4.0, 0.0, -4.0, 0.0], "dimension": 2, "values": [-4.0, -5.0, -6.0, 0.0]}
+               -> ok  simulations_spent=0
+[turn 2/20] best=18.0000 θ*=[4.0000, 0.0000, -4.0000, 0.0000] | sims_total=83/2000 | explore_share=0.25 | trust_radii=[0.98, 0.196, 0.98, 0.098] | plateau=2/5
+            hypothesis (None): J>18 achievable with θ0≥5.0 and θ2≤-5.0. θ1,θ3 remain zero.
+            reasoning: Elite at J=18.0 with θ0=4.0, θ2=-4.0. Coord obs suggests θ0~5.3, θ2~-5.1. Previous scan covered [2,4]x[-6,-4]. Need to explore higher θ0 and lower θ2. Also test zeroed axes per sparsity heuristic. Plan: 1) local_sweep θ0 around 4.0 with values [4.0, 5.0, 6.0, 0.0]. 2) local_sweep
+            elite_top5: J=18.00 θ=[4.000, 0.000, -4.000, 0.000], J=18.00 θ=[2.000, 0.000, -6.000, 0.000], J=18.00 θ=[3.000, 0.000, -6.000, 0.000], J=18.00 θ=[4.000, 0.000, -6.000, 0.000], J=18.00 θ=[5.000, 0.000, -6.000, 0.000]
+
+[turn 3/20] запрос к LLM (таймаут 240 с)...
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+            tool: local_sweep  args={"center_theta": [4.0, 0.0, -4.0, 0.0], "dimension": 0, "values": [8.0, 10.0, 12.0]}
+               -> ok  simulations_spent=3
+[turn 3/20] best=18.0000 θ*=[4.0000, 0.0000, -4.0000, 0.0000] | sims_total=91/2000 | explore_share=0.33 | trust_radii=[1.372, 0.274, 1.372, 0.137] | plateau=3/5
+            hypothesis (None): J=18 may be a local plateau for θ0∈[4,6], θ2∈[-6,-4]. Testing larger magnitudes (θ0≥8, θ2≤-8) and non-zero θ1,θ3 via novelty search to escape basin.
+            elite_top5: J=18.00 θ=[4.000, 0.000, -4.000, 0.000], J=18.00 θ=[2.000, 0.000, -6.000, 0.000], J=18.00 θ=[3.000, 0.000, -6.000, 0.000], J=18.00 θ=[4.000, 0.000, -6.000, 0.000], J=18.00 θ=[5.000, 0.000, -6.000, 0.000]
+
+[turn 4/20] запрос к LLM (таймаут 240 с)...
+            tool: plane_scan  args={"center_theta": [-4.0, 0.0, 4.0, 0.0], "dims": [0, 2], "radius": 2.0, "steps": 5}
+               -> ok  simulations_spent=24
+[turn 4/20] best=18.0000 θ*=[4.0000, 0.0000, -4.0000, 0.0000] | sims_total=115/2000 | explore_share=0.29 | trust_radii=[1.5, 0.384, 1.5, 0.192] | plateau=4/5
+            hypothesis (None): J=18 is a local plateau for the sign pattern (+, 0, -, 0). Testing the sign-flipped basin (-, 0, +, 0) on sensitive axes θ0, θ2 to see if the policy symmetry allows higher scores.
+            elite_top5: J=18.00 θ=[4.000, 0.000, -4.000, 0.000], J=18.00 θ=[2.000, 0.000, -6.000, 0.000], J=18.00 θ=[3.000, 0.000, -6.000, 0.000], J=18.00 θ=[4.000, 0.000, -6.000, 0.000], J=18.00 θ=[5.000, 0.000, -6.000, 0.000]
+
+[turn 5/20] запрос к LLM (таймаут 240 с)...
+            tool: novelty_search  args={"n_candidates": 5, "evaluate": true}
+               -> ok  simulations_spent=5
+[turn 5/20] best=18.0000 θ*=[4.0000, 0.0000, -4.0000, 0.0000] | sims_total=120/2000 | explore_share=0.38 | trust_radii=[1.5, 0.538, 1.5, 0.269] | plateau=5/5
+            hypothesis (None): J=18 may be near physical ceiling for this seed; policy heavily relies on θ0,θ2. Non-zero θ1,θ3 or mixed sign patterns could break plateau.
+            reasoning: Elite stuck at J=18 with θ1=θ3=0. Sign-flip basin yielded J=0. Testing unexplored regions via novelty_search to find potentially higher-J configurations or confirm physical ceiling.
+            elite_top5: J=18.00 θ=[4.000, 0.000, -4.000, 0.000], J=18.00 θ=[2.000, 0.000, -6.000, 0.000], J=18.00 θ=[3.000, 0.000, -6.000, 0.000], J=18.00 θ=[4.000, 0.000, -6.000, 0.000], J=18.00 θ=[5.000, 0.000, -6.000, 0.000]
+[stop] плато: best не растёт 5 ходов подряд (patience=5). best=18.0000
+
+--- итог ---
+Best: J=18.0 θ=[4.0, 0.0, -4.0, 0.0] (apples=19, steps=111, died=True)
+Всего симуляций: 120; уникальных θ в кэше: 120
+Топ-10 elite:
+  J=18.0  θ=[4.0, 0.0, -4.0, 0.0]
+  J=18.0  θ=[2.0, 0.0, -6.0, 0.0]
+  J=18.0  θ=[3.0, 0.0, -6.0, 0.0]
+  J=18.0  θ=[4.0, 0.0, -6.0, 0.0]
+  J=18.0  θ=[5.0, 0.0, -6.0, 0.0]
+  J=18.0  θ=[6.0, 0.0, -6.0, 0.0]
+  J=18.0  θ=[2.0, 0.0, -5.0, 0.0]
+  J=18.0  θ=[3.0, 0.0, -5.0, 0.0]
+  J=18.0  θ=[4.0, 0.0, -5.0, 0.0]
+  J=18.0  θ=[5.0, 0.0, -5.0, 0.0]
